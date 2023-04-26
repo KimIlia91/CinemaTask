@@ -25,7 +25,6 @@ namespace Cinema.WEB.Services
 
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file!.FileName);
             var uploads = Path.Combine(_hostEnvironment.WebRootPath, savePath);
-
             using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
             {
                 await file.CopyToAsync(fileStream);
@@ -39,7 +38,6 @@ namespace Cinema.WEB.Services
             if (videoUrl is null) return false;
 
             var oldImagePath = Path.Combine(_hostEnvironment.WebRootPath, videoUrl.TrimStart('\\'));
-
             if (File.Exists(oldImagePath))
             {
                 File.Delete(oldImagePath);
@@ -58,13 +56,11 @@ namespace Cinema.WEB.Services
                 throw new ArgumentException("Недопустимый размер файла");
 
             var allowedTypes = new[] { "video/mp4", "video/x-msvideo", "video/quicktime", "video/x-matroska" };
-
             if (!allowedTypes.Contains(file.ContentType))
                 throw new ArgumentException("Недопустимый тип файла");
 
             var allowedExtensions = new[] { ".mp4", ".avi", ".mov", ".mkv" };
             var fileExtension = Path.GetExtension(file.FileName);
-
             if (!allowedExtensions.Contains(fileExtension))
                 throw new ArgumentException("Недопустимое расширение файла");
 
