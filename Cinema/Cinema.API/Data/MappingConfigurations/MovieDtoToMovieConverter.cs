@@ -27,6 +27,5 @@ namespace Cinema.API.Data.MappingConfigurations
 
             return destination;
         }
-    {
     }
 }
