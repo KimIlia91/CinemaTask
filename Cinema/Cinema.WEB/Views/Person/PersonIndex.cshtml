@@ -1,0 +1,118 @@
+﻿@model PersonsFilteredResponse
+@using Cinema.WEB.Models.PersonModels.PersonVms;
+@using Cinema.WEB.Models.PersonModels;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            @using (Html.BeginForm("PersonIndex", "Person", FormMethod.Get))
+            {
+                <div class="row justify-content-between">
+                    <div class="col-md-auto">
+                        <p>
+                            <a asp-controller="Person" asp-action="PersonCreate" class="btn btn-success shadow"><i class="bi bi-plus-square"></i></a>
+                        </p>
+                    </div>
+
+                    <div class="col-md-auto">
+                        <div class="d-flex flex-wrap align-items-center">
+                            <div class="flex-fill me-2">
+                                <p class="shadow">
+                                    @Html.TextBox("search", Model.Search, new { @class = "form-control w-100" })
+                                </p>
+                            </div>
+                            <div>
+                                <p>
+                                    <input type="submit" value="найти" class="btn btn-primary shadow" />
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover col-md-6 fixed-table">
+                            <thead>
+                                <tr>
+                                    <th width="35%" class="text-center align-middle">
+                                        @if (Model.Sort)
+                                            @Html.ActionLink("Фамилия", "PersonIndex",
+                                        new { sort = false,
+                                        search = Model.Search,
+                                        page = Model.PersonsPage.CurrentPage,
+                                        pageSize = Model.PersonsPage.PageSize })
+                                        else
+                                            @Html.ActionLink("Фамилия", "PersonIndex",
+                                        new { sort = true, search = Model.Search,
+                                        page = Model.PersonsPage.CurrentPage,
+                                        pageSize = Model.PersonsPage.PageSize })
+
+                                        </th>
+                                        <th width="30%" class="text-center align-middle">Имя</th>
+                                        <th width="35%" class="text-center align-middle">Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var person in Model.PersonsPage.Items)
+                                {
+                                    <tr>
+                                        <td class="text-center align-middle">@person.LastName</td>
+                                        <td class="text-center align-middle">@person.FirstName</td>
+                                        <td class="text-center align-middle">
+                                            <a asp-controller="Person" asp-action="PersonUpdate" asp-route-id="@person.Id" class="btn btn-success m-1"><i class="bi bi-pencil-square"></i></a>
+                                            <a asp-controller="Person" asp-action="PersonDelete" asp-route-id="@person.Id" class="btn btn-danger delete-btn"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-center mt-3">
+                            <div class="mx-2">
+                                @if (Model.PersonsPage.CurrentPage > 1)
+                                {
+                                    <a class="btn btn-primary btn-block text-truncate" href="@Url.Action("PersonIndex",
+                                                                                                 new { page = Model.PersonsPage.CurrentPage - 1,
+                                                                                                       search = Model.Search,
+                                                                                                       sort = Model.Sort })">
+                                        <span class="glyphicon glyphicon-chevron-left"></span> назад
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary disabled btn-block text-truncate">
+                                        <span class="glyphicon glyphicon-chevron-left"></span> назад
+                                    </a>
+                                }
+                            </div>
+
+                            <div class="mx-2">
+                                @if (Model.PersonsPage.CurrentPage < Model.PersonsPage.TotalPages)
+                                {
+                                    <a class="btn btn-primary btn-block text-truncate" href="@Url.Action("PersonIndex",
+                                                                                                 new { page = Model.PersonsPage.CurrentPage + 1,
+                                                                                                       search = Model.Search,
+                                                                                                       sort = Model.Sort })">
+                                        далее <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary disabled btn-block text-truncate">
+                                        далее <span class="glyphicon glyphicon-chevron-right"></span>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="scroll-to-top-btn" class="btn btn-primary btn-floating"><i class="bi bi-arrow-up-circle"></i></button>

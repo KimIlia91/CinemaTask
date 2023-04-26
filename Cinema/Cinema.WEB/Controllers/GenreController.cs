@@ -24,7 +24,6 @@ namespace Cinema.WEB.Controllers
             var token = HttpContext.Session.GetString(SD.SessionToken);
             var genreDtos = await _unitOfWork.Genres.GetAllGenersAsync(token!);
             var genreVms = _mapper.Map<List<GenreVm>>(genreDtos);
-
             if (genreDtos.Any())
             {
                 return View(genreVms);

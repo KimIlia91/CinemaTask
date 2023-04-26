@@ -1,23 +1,18 @@
-﻿using AutoMapper;
-using Cinema.WEB.Helpers;
+﻿using Cinema.WEB.Helpers;
 using Cinema.WEB.Models.PersonModels;
-using Cinema.WEB.Models.PersonModels.PersonDtos;
 using Cinema.WEB.Models.PersonModels.PersonVms;
 using Cinema.WEB.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Cinema.WEB.Controllers
 {
     public class PersonController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public PersonController(IUnitOfWork unitOfWork, IMapper mapper)
+        public PersonController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         // GET: PersonController
@@ -33,7 +28,8 @@ namespace Cinema.WEB.Controllers
         // GET: PersonController/Create
         public ActionResult PersonCreate()
         {
-            return View();
+            var personVm = new PersonCreateVm();
+            return View(personVm);
         }
 
         // POST: PersonController/Create
@@ -44,11 +40,10 @@ namespace Cinema.WEB.Controllers
             if (ModelState.IsValid)
             {
                 var token = HttpContext.Session.GetString(SD.SessionToken);
+                personVm.Person.ImageUrl = await _unitOfWork.Images.SaveImageAsync(personVm.ImageFile, personVm.Person.ImageUrl, @"images\persons");
                 var isSuccess = await _unitOfWork.Persons.CreatePersonAsync(personVm.Person, token!);
                 if (isSuccess)
                 {
-                    personVm.Person.ImageUrl = await _unitOfWork.Images.SaveImageAsync(
-                        personVm.ImageFile, personVm.Person.ImageUrl, @"images\persons");
                     TempData["success"] = "Информация успешно добавлена!";
                     return RedirectToAction(nameof(PersonIndex));
                 }

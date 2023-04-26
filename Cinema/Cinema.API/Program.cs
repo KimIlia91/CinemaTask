@@ -50,7 +50,6 @@ namespace Cinema.API
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();

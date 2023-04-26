@@ -1,3 +1,7 @@
+using Cinema.WEB.Data;
+using Cinema.WEB.Services;
+using Cinema.WEB.Services.IServices;
+
 namespace Cinema.WEB
 {
     public class Program
@@ -8,7 +12,41 @@ namespace Cinema.WEB
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddAutoMapper(typeof(MappingConfig));
 
+            builder.Services.AddHttpClient<IPersonService, PersonService>();
+            builder.Services.AddScoped<IPersonService, PersonService>();
+
+            builder.Services.AddHttpClient<IGenreService, GenreService>();
+            builder.Services.AddScoped<IGenreService, GenreService>();
+
+            builder.Services.AddHttpClient<IMovieService, MovieService>();
+            builder.Services.AddScoped<IMovieService, MovieService>();
+
+            builder.Services.AddHttpClient<IActorService, ActorService>();
+            builder.Services.AddScoped<IActorService, ActorService>();
+
+            builder.Services.AddHttpClient<IDirectorService, DirectorService>();
+            builder.Services.AddScoped<IDirectorService, DirectorService>();
+
+            builder.Services.AddHttpClient<IScreenwriterService, ScreenwriterService>();
+            builder.Services.AddScoped<IScreenwriterService, ScreenwriterService>();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            builder.Services.AddScoped<IImageService, ImageService>();
+            builder.Services.AddScoped<IVideoService, VideoService>();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(opt =>
+            {
+                opt.IdleTimeout = TimeSpan.FromMinutes(30);
+                opt.Cookie.HttpOnly = true;
+                opt.Cookie.IsEssential = true;
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -21,7 +59,7 @@ namespace Cinema.WEB
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();

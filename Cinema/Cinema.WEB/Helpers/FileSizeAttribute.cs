@@ -11,7 +11,7 @@ namespace Cinema.WEB.Helpers
             _maxFileSize = maxFileSize;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object value, ValidationContext validationContext)
         {
             var file = value as IFormFile;
             if (file is null)

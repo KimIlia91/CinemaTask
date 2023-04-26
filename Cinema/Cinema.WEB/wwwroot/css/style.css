@@ -1,0 +1,11 @@
+#scroll-to-top-btn {
+    display: none;
+    position: fixed;
+    right: 80px;
+    bottom: 75px;
+    z-index: 9999;
+}
+
+    #scroll-to-top-btn.show-scroll-to-top-btn {
+        display: block;
+    }
