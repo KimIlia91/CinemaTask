@@ -47,6 +47,8 @@ namespace Cinema.WEB.Controllers
                     TempData["success"] = "Информация успешно добавлена!";
                     return RedirectToAction(nameof(PersonIndex));
                 }
+
+                _unitOfWork.Images.DeleteImage(personVm.Person.ImageUrl);
             }
 
             TempData["error"] = "Oops! Неудалось добавить информацию!";

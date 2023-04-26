@@ -55,7 +55,7 @@ namespace Cinema.WEB.Controllers
         // POST: MovieController/MovieCreate
         [HttpPost]
         [DisableRequestSizeLimit]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]  
         public async Task<IActionResult> MovieCreate(MovieCreateVm movieVm)
         {
             var token = HttpContext.Session.GetString(SD.SessionToken);
@@ -72,6 +72,7 @@ namespace Cinema.WEB.Controllers
             }
 
             _unitOfWork.Images.DeleteImage(movieVm.Movie.ImageUrl);
+            _unitOfWork.Videos.DeleteVideo(movieVm.Movie.VideoUrl);
             movieVm.ActorList = await _unitOfWork.Actors.GetSelectListOfActorsAsync(token!, movieVm.Movie.Actors);
             movieVm.DirectorList = await _unitOfWork.Directors.GetSelectListOfDirectorsAsync(token!, movieVm.Movie.Directors);
             movieVm.ScreenwriterList = await _unitOfWork.Screenwriters.GetSelectListOfScreenwritersAsync(
