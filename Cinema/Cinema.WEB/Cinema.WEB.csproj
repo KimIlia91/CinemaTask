@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\ffmpeg\**" />
-    <Content Remove="wwwroot\ffmpeg\**" />
-    <EmbeddedResource Remove="wwwroot\ffmpeg\**" />
-    <None Remove="wwwroot\ffmpeg\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Xabe.FFmpeg" Version="5.2.6" />
   </ItemGroup>
 
