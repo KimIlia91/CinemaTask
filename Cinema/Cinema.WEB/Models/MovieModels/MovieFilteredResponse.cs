@@ -1,4 +1,6 @@
-﻿namespace Cinema.WEB.Models.MovieModels
+﻿using Cinema.WEB.Models.MovieModels.MovieVms;
+
+namespace Cinema.WEB.Models.MovieModels
 {
     public class MovieFilteredResponse
     {

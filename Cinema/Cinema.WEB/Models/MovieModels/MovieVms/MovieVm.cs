@@ -1,4 +1,7 @@
-﻿namespace Cinema.WEB.Models.MovieModels.MovieVms
+﻿using Cinema.WEB.Models.CastModels.CastDtos;
+using Cinema.WEB.Models.GenreModels.GenreDtos;
+
+namespace Cinema.WEB.Models.MovieModels.MovieVms
 {
     public class MovieVm
     {

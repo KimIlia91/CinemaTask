@@ -1,4 +1,6 @@
-﻿namespace Cinema.WEB.Models.PersonModels
+﻿using Cinema.WEB.Models.PersonModels.PersonVms;
+
+namespace Cinema.WEB.Models.PersonModels
 {
     public class PersonsFilteredResponse
     {
