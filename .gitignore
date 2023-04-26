@@ -364,3 +364,10 @@ FodyWeavers.xsd
 /Cinema/Cinema.WEB/wwwroot/ffmpeg/ffprobe.exe
 /Cinema/Cinema.WEB/wwwroot/ffmpeg/ffplay.exe
 /Cinema/Cinema.WEB/wwwroot/ffmpeg/ffmpeg.exe
+
+# Media files
+*.mp4
+*.avi
+*.mov
+*.jpg
+*.gif
