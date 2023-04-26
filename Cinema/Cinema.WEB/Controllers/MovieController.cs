@@ -31,7 +31,6 @@ namespace Cinema.WEB.Controllers
             var request = new MoviesFilterRequest(search, titleFilter, directorFilter, genreFilter, sort, pageSize, page);
             var token = HttpContext.Session.GetString(SD.SessionToken);
             var pageResponse = await _unitOfWork.Movies.GetAllMoviesAsync(token!, request);
-
             if (pageResponse is not null)
             {
                 return View(pageResponse);
@@ -60,7 +59,6 @@ namespace Cinema.WEB.Controllers
         public async Task<IActionResult> MovieCreate(MovieCreateVm movieVm)
         {
             var token = HttpContext.Session.GetString(SD.SessionToken);
-
             if (ModelState.IsValid)
             {
                 movieVm.Movie.ImageUrl = await _unitOfWork.Images.SaveImageAsync(movieVm.ImageFile, movieVm.Movie.ImageUrl, @"images\movies");
@@ -112,7 +110,6 @@ namespace Cinema.WEB.Controllers
         public async Task<IActionResult> MovieUpdate(MovieUpdateVm movieVm)
         {
             var token = HttpContext.Session.GetString(SD.SessionToken);
-
             if (ModelState.IsValid)
             {
                 movieVm.Movie.ImageUrl = await _unitOfWork.Images.SaveImageAsync(movieVm.ImageFile, movieVm.Movie.ImageUrl, @"images\movies");

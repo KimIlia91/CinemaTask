@@ -1,0 +1,22 @@
+﻿<script>
+    const submitButton = document.querySelector('#submitButton');
+    const form = document.querySelector('#myForm');
+
+    submitButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        Swal.fire({
+            title: "Сохранение...",
+            text: "Пожалуйста, подождите",
+            showConfirmButton: false,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        setTimeout(() => {
+            form.submit();
+        }, 10000);
+    });
+</script>

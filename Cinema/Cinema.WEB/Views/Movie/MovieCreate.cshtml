@@ -1,0 +1,125 @@
+﻿@model Cinema.WEB.Models.MovieModels.MovieVms.MovieCreateVm
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-10 mt-3 mb-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form id="myForm" class="col-md-auto" method="post" asp-action="MovieCreate" enctype="multipart/form-data">
+                        <div class="p-3 row">
+
+                            <center>
+                                <h1>Обновить фильм</h1>
+                            </center>
+
+                            <div class="col-12 pb-2">
+                                <hr />
+                                <div class="col-md-auto">
+                                    <select asp-for="Movie.GenreId" class="form-select text-center" asp-items="@Model.GenreList">
+                                        <option disabled selected>--Выберите жанр--</option>
+                                    </select>
+                                    <span asp-validation-for="Movie.GenreId" class="text-danger"></span>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-12 col-md-6">
+                                        <label asp-for="Movie.Title" class="control-label m-1"></label>
+                                        <input asp-for="Movie.Title" class="form-control" />
+                                        <span asp-validation-for="Movie.Title" class="text-danger"></span>
+                                    </div>
+                                    <div class="col">
+                                        <label asp-for="Movie.Country" class="control-label m-1"></label>
+                                        <input asp-for="Movie.Country" class="form-control" />
+                                        <span asp-validation-for="Movie.Country" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-12 col-md-6">
+                                        <label asp-for="Movie.ReleaseYear" class="control-label m-1"></label>
+                                        <input asp-for="Movie.ReleaseYear" class="form-control" />
+                                        <span asp-validation-for="Movie.ReleaseYear" class="text-danger"></span>
+                                    </div>
+                                    <div class="col">
+                                        <label asp-for="Movie.RuntimeInMinutes" class="control-label m-1"></label>
+                                        <input asp-for="Movie.RuntimeInMinutes" class="form-control" />
+                                        <span asp-validation-for="Movie.RuntimeInMinutes" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <label asp-for="Movie.ShortDescription" class="control-label m-1"></label>
+                                        <textarea asp-for="Movie.ShortDescription" class="form-control"></textarea>
+                                        <span asp-validation-for="Movie.ShortDescription" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <label asp-for="Movie.Description" class="control-label m-1"></label>
+                                        <textarea asp-for="Movie.Description" class="form-control"></textarea>
+                                        <span asp-validation-for="Movie.Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-12 col-md-6">
+                                        <label asp-for="Movie.VideoUrl" class="control-label m-1"></label>
+                                        <input asp-for="VideoFile" type="file" class="form-control" />
+                                        <span asp-validation-for="VideoFile" class="text-danger"></span>
+                                    </div>
+                                    <div class="col">
+                                        <label asp-for="Movie.ImageUrl" class="control-label m-1"></label>
+                                        <input asp-for="ImageFile" type="file" class="form-control" />
+                                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="form-group mt-3">
+                                        <label asp-for="Movie.Directors" class="control-label m-1"></label>
+                                        <select asp-for="Movie.Directors" asp-items="Model.DirectorList" class="form-control" multiple></select>
+                                    </div>
+
+                                    <div class="form-group mt-3">
+                                        <label asp-for="Movie.Screenwriters" class="control-label m-1"></label>
+                                        <select asp-for="Movie.Screenwriters" asp-items="Model.ScreenwriterList" class="form-control" multiple></select>
+                                    </div>
+
+                                    <div class="form-group mt-3">
+                                        <label asp-for="Movie.Actors" class="control-label m-1"></label>
+                                        <select asp-for="Movie.Actors" asp-items="Model.ActorList" class="form-control" multiple></select>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <button id="submitButton" type="submit" class="btn btn-primary col-12">Добавить</button>
+                                    </div>
+                                    <div class="col">
+                                        <a asp-controller="Movie" asp-action="MovieIndex" class="btn btn-danger col-12">
+                                            Назад
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="scroll-to-top-btn" class="btn btn-primary btn-floating"><i class="bi bi-arrow-up-circle"></i></button>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_TextareaScriptPartial");
+        await Html.RenderPartialAsync("_MultipleSelectionPartial");
+        await Html.RenderPartialAsync("_SaveMessagePartial");
+    }
+}

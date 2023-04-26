@@ -1,0 +1,12 @@
+﻿<script>
+    $(document).ready(function () {
+        $("#Movie_Actors, #Movie_Directors, #Movie_Screenwriters").on("mousedown", function (e) {
+            e.preventDefault();
+            $(this).focus();
+            var scroll = this.scrollTop;
+            e.target.selected = !e.target.selected;
+            this.scrollTop = scroll;
+            $(this).trigger("change");
+        });
+    });
+</script>
