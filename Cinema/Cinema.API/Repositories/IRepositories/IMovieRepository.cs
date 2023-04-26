@@ -2,7 +2,7 @@
 
 namespace Cinema.API.Repositories.IRepositories
 {
-    public interface IMovieRepository
+    public interface IMovieRepository : IBaseRepository<Movie>
     {
         IQueryable<Movie> GetFilteredMoviesQuery(
          string? search, string? titleFilter, string? directorFilter, string? genreFilter);

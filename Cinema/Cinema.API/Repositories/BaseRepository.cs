@@ -2,7 +2,6 @@
 using Cinema.API.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Linq;
 
 namespace Cinema.API.Repositories
 {
