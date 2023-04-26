@@ -4,6 +4,6 @@
     {
         Task<string?> SaveVideoAsync(IFormFile? file, string? existingImagePath, string savePath);
 
-        bool DeleteImage(string? videoUrl);
+        bool DeleteVideo(string? videoUrl);
     }
 }

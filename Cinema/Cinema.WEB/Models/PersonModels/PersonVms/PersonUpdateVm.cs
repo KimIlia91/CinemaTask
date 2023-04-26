@@ -6,8 +6,6 @@ namespace Cinema.WEB.Models.PersonModels.PersonVms
     {
         public PersonDto Person { get; set; }
 
-        public IFormFile? VideoFile { get; set; }
-
         public IFormFile? ImageFile { get; set; }
 
         public PersonUpdateVm()

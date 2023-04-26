@@ -13,8 +13,7 @@ namespace Cinema.WEB.Services
 
         public async Task<string?> SaveImageAsync(IFormFile? file, string? existingImagePath, string savePath)
         {
-            if (file is null)
-                return existingImagePath;
+            if (file is null) return existingImagePath;
 
             if (!string.IsNullOrEmpty(existingImagePath))
             {
