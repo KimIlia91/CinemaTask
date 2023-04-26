@@ -69,10 +69,11 @@ namespace Cinema.WEB.Controllers
                     TempData["success"] = "Информация успешно добавлена!";
                     return RedirectToAction(nameof(MovieIndex));
                 }
+
+                _unitOfWork.Images.DeleteImage(movieVm.Movie.ImageUrl);
+                _unitOfWork.Videos.DeleteVideo(movieVm.Movie.VideoUrl);
             }
 
-            _unitOfWork.Images.DeleteImage(movieVm.Movie.ImageUrl);
-            _unitOfWork.Videos.DeleteVideo(movieVm.Movie.VideoUrl);
             movieVm.ActorList = await _unitOfWork.Actors.GetSelectListOfActorsAsync(token!, movieVm.Movie.Actors);
             movieVm.DirectorList = await _unitOfWork.Directors.GetSelectListOfDirectorsAsync(token!, movieVm.Movie.Directors);
             movieVm.ScreenwriterList = await _unitOfWork.Screenwriters.GetSelectListOfScreenwritersAsync(
