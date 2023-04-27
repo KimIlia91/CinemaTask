@@ -30,48 +30,67 @@
             }
             <div class="card shadow">
                 <div class="card-body">
+
                     @foreach (var movie in Model.MoviesPage.Items)
                     {
-                        <div class="card mb-3 border-1" style="border:none;">
-                            <div class="row no-gutters p-2">
-                                <a asp-controller="Movie" asp-action="MovieDetails" asp-route-id="@movie.Id" class="col-xl-4 d-flex justify-content-center align-items-center">
+                        <div class="card-body">
+                            <div class="row">
+                                <a asp-controller="Movie" asp-action="MovieDetails" asp-route-id="@movie.Id" class="col-lg-3 d-flex justify-content-center align-items-center">
                                     @if (!string.IsNullOrEmpty(movie.ImageUrl))
                                     {
-                                        <img src="@movie.ImageUrl" alt="movie img" class="img-fluid rounded" style="object-fit:cover; height: 100%;">
+                                        <img id="preview" src="@movie.ImageUrl" alt="movie img" class="img-fluid rounded" style="object-fit:cover; height: 100%;">
                                     }
                                     else
                                     {
-                                        <img src="\images\movies\1644809237_10-fikiwiki-com-p-prikolnie-kartinki-oi-durak-13.png" class="img-fluid rounded" style="object-fit: contain;">
+                                        <img id="preview" src="\images\movies\1644809237_10-fikiwiki-com-p-prikolnie-kartinki-oi-durak-13.png" class="img-fluid rounded" style="object-fit: contain;">
                                     }
                                 </a>
-                                <div class="col-xl-8">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <h5 class="col-9 card-title">@movie.Title</h5>
-                                            <div class="col-3">
-                                                <a asp-controller="Movie" asp-action="MovieUpdate" asp-route-id="@movie.Id" class="btn btn-success m-1"><i class="bi bi-pencil-square"></i></a>
-                                                <a asp-controller="Movie" asp-action="MovieDelete" asp-route-id="@movie.Id" class="btn btn-danger delete-btn"><i class="bi bi-trash"></i></a>
-                                            </div>
+                                <div class="col-lg-9">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <h4>@movie.Title</h4>
                                         </div>
-                                        <p class="card-text"><b>Жанр: </b>@movie.Genre.Name</p>
-                                        <p class="card-text"><b>Страна: </b>@movie.Country</p>
-                                        <p class="card-text"><b>Длительность: </b>@movie.RuntimeInMinutes мин</p>
-                                        <p class="card-text"><b>Режиссёр: </b>
-                                            @string.Join(", ", movie.Directors.Select(director => $"{director.FirstName} {director.LastName}"))
-                                        </p>
-                                        <p class="card-text"><b>Сценарист: </b>
-                                            @string.Join(", ", movie.Screenwriters.Select(screenwriter => $"{screenwriter.FirstName} {screenwriter.LastName}"))
-                                        </p>
-                                        <p class="card-text">
-                                            <b>Актёры: </b>
-                                            @string.Join(", ", movie.Actors.Select(actor => $"{actor.FirstName} {actor.LastName}"))
-                                        </p>
-                                        <div class="card-text"><b>Описание: </b>@Html.Raw(movie.ShortDescription)</div>
+                                        <div class="col-3 text-end">
+                                            <a asp-controller="Movie" asp-action="MovieUpdate" asp-route-id="@movie.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                                            <a asp-controller="Person" asp-action="MovieDelete" asp-route-id="@movie.Id" class="btn btn-danger delete-btn"><i class="bi bi-trash"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <span><b>Год выпуска:</b></span>
+                                        @movie.ReleaseYear
+                                    </div>
+                                    <div class="col mt-1">
+                                        <span><b>Страна:</b></span>
+                                        @movie.Country
+                                    </div>
+                                    <div class="col mt-1">
+                                        <span><b>Жанр:</b></span>
+                                        @movie.Genre.Name
+                                    </div>
+                                    <div class="col mt-1">
+                                        <span><b>Продолжительность:</b></span>
+                                        @movie.RuntimeInMinutes мин.
+                                    </div>
+                                    <div class="col mt-1">
+                                        <span><b>Режиссёр:</b></span>
+                                        @string.Join(", ", movie.Directors.Select(d => $"{d.FirstName} {d.LastName}"))
+                                    </div>
+                                    <div class="col mt-1">
+                                        <span><b>Сценарий:</b></span>
+                                        @string.Join(", ", movie.Screenwriters.Select(s => $"{s.FirstName} {s.LastName}"))
+                                    </div>
+                                    <div class="col mt-1">
+                                        <span><b>Актёры:</b></span>
+                                        @string.Join(", ", movie.Actors.Select(a => $"{a.FirstName} {a.LastName}"))
+                                    </div>
+                                    <div class="col mt-1">
+                                        <span><b>Качество:</b></span>
+                                        .mp4
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @if (!movie.Equals(Model.MoviesPage.Items.Last()))
+                        if (!movie.Equals(Model.MoviesPage.Items.Last()))
                         {
                             <hr />
                         }
