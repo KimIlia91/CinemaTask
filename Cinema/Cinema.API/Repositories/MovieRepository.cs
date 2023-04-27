@@ -41,13 +41,12 @@ namespace Cinema.API.Repositories
         }
 
         public IQueryable<Movie> GetSortedMoviesQuery(IQueryable<Movie> query, bool sort = true) =>
-            sort ? query.OrderByDescending(m => m.Title) : query.OrderBy(m => m.Title);
+            sort ? query.OrderByDescending(m => m.Title) : query.OrderBy(m => m.PublicationDate);
 
         public async Task<Movie?> GetMovieIncludePersonAsync(Guid movieId)
         {
             _db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            var movie = await _db.Movies.AsNoTracking()
-                                        .Include(m => m.Actors)
+            var movie = await _db.Movies.Include(m => m.Actors)
                                             .ThenInclude(a => a.Person)
                                         .Include(m => m.Directors)
                                             .ThenInclude(d => d.Person)
