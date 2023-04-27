@@ -30,87 +30,86 @@
             }
             <div class="card shadow">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover col-md-6 fixed-table">
-                            <thead>
-                                <tr>
-                                    <th width="35%" class="text-center align-middle">
-                                        @if (Model.Sort)
-                                            @Html.ActionLink("Наименование", "MovieIndex",
-                                                             new { sort = false,
-                                                                   search = Model.Search,
-                                                                   page = Model.MoviesPage.CurrentPage,
-                                                                   pageSize = Model.MoviesPage.PageSize })
-                                        else
-                                            @Html.ActionLink("Наименование", "MovieIndex",
-                                                             new { sort = true,
-                                                                   search = Model.Search,
-                                                                   page = Model.MoviesPage.CurrentPage,
-                                                                   pageSize = Model.MoviesPage.PageSize })
-
-
-                                        </th>
-                                        <th width="30%" class="text-center align-middle">Дата выхода</th>
-                                        <th width="35%" class="text-center align-middle">Действия</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach (var movie in Model.MoviesPage.Items)
-                                {
-                                    <tr>
-                                        <td class="text-center align-middle">@movie.Title</td>
-                                        <td class="text-center align-middle">@movie.ReleaseYear</td>
-                                        <td class="text-center align-middle">
-                                            <a asp-controller="Movie" asp-action="MovieUpdate" asp-route-id="@movie.Id" class="btn btn-success m-1"><i class="bi bi-pencil-square"></i></a>
-                                            <a asp-controller="Movie" asp-action="MovieDelete" asp-route-id="@movie.Id" class="btn btn-danger delete-btn"><i class="bi bi-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <div class="d-flex justify-content-center mt-3">
-                            <div class="mx-2">
-                                @if (Model.MoviesPage.CurrentPage > 1)
-                                {
-                                    <a class="btn btn-primary btn-block text-truncate" href="@Url.Action("MovieIndex",
+                    @foreach (var movie in Model.MoviesPage.Items)
+                    {
+                        <div class="card mb-3 border-1" style="border:none;">
+                            <div class="row no-gutters p-2">
+                                <a asp-controller="Movie" asp-action="MovieDetails" asp-route-id="@movie.Id" class="col-xl-4 d-flex justify-content-center align-items-center">
+                                    <img src="@movie.ImageUrl" alt="movie img" class="card-img rounded" style="object-fit: contain;">
+                                </a>
+                                <div class="col-xl-8">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <h5 class="col-9 card-title">@movie.Title</h5>
+                                            <div class="col-3">
+                                                <a asp-controller="Movie" asp-action="MovieUpdate" asp-route-id="@movie.Id" class="btn btn-success m-1"><i class="bi bi-pencil-square"></i></a>
+                                                <a asp-controller="Movie" asp-action="MovieDelete" asp-route-id="@movie.Id" class="btn btn-danger delete-btn"><i class="bi bi-trash"></i></a>
+                                            </div>
+                                        </div>                  
+                                        <p class="card-text">Жанр: @movie.Genre.Name</p>
+                                        <p class="card-text">Страна: @movie.Country</p>
+                                        <p class="card-text">Длительность: @movie.RuntimeInMinutes мин</p>
+                                        <p class="card-text"> Режиссёр:
+                                            @string.Join(", ", movie.Directors.Select(director => $"{director.FirstName} {director.LastName}"))
+                                        </p>
+                                        <p class="card-text">Сценарист:
+                                            @string.Join(", ", movie.Screenwriters.Select(screenwriter => $"{screenwriter.FirstName} {screenwriter.LastName}"))
+                                        </p>
+                                        <p class="card-text">
+                                            Актёры:
+                                            @string.Join(", ", movie.Actors.Select(actor => $"{actor.FirstName} {actor.LastName}"))
+                                        </p>
+                                        <div class="card-text">Описание: @Html.Raw(movie.ShortDescription)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (!movie.Equals(Model.MoviesPage.Items.Last()))
+                        {
+                            <hr />
+                        }
+                    }
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="mx-2">
+                            @if (Model.MoviesPage.CurrentPage > 1)
+                            {
+                                <a class="btn btn-primary btn-block text-truncate" href="@Url.Action("MovieIndex",
                                                                                                              new { page = Model.MoviesPage.CurrentPage - 1,
                                                                                                                    search = Model.Search,
                                                                                                                    sort = Model.Sort,
                                                                                                                    titleFilter = Model.TitleFilter,
                                                                                                                    directorFilter = Model.DirectorFilter,
                                                                                                                    genreFilter = Model.GenreFilter })">
-                                        <span class="glyphicon glyphicon-chevron-left"></span> назад
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-primary disabled btn-block text-truncate">
-                                        <span class="glyphicon glyphicon-chevron-left"></span> назад
-                                    </a>
-                                }
-                            </div>
+                                    <span class="glyphicon glyphicon-chevron-left"></span> назад
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary disabled btn-block text-truncate">
+                                    <span class="glyphicon glyphicon-chevron-left"></span> назад
+                                </a>
+                            }
+                        </div>
 
-                            <div class="mx-2">
-                                @if (Model.MoviesPage.CurrentPage < Model.MoviesPage.TotalPages)
-                                {
-                                    <a class="btn btn-primary btn-block text-truncate" href="@Url.Action("MovieIndex",
+                        <div class="mx-2">
+                            @if (Model.MoviesPage.CurrentPage < Model.MoviesPage.TotalPages)
+                            {
+                                <a class="btn btn-primary btn-block text-truncate" href="@Url.Action("MovieIndex",
                                                                                                          new { page = Model.MoviesPage.CurrentPage - 1,
                                                                                                                search = Model.Search,
                                                                                                                sort = Model.Sort,
                                                                                                                titleFilter = Model.TitleFilter,
                                                                                                                directorFilter = Model.DirectorFilter,
                                                                                                                genreFilter = Model.GenreFilter })">
-                                        далее <span class="glyphicon glyphicon-chevron-right"></span>
-                                    </a>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-primary disabled btn-block text-truncate">
-                                        далее <span class="glyphicon glyphicon-chevron-right"></span>
-                                    </a>
-                                }
-                            </div>
+                                    далее <span class="glyphicon glyphicon-chevron-right"></span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary disabled btn-block text-truncate">
+                                    далее <span class="glyphicon glyphicon-chevron-right"></span>
+                                </a>
+                            }
                         </div>
                     </div>
                 </div>

@@ -14,6 +14,11 @@ namespace Cinema.WEB.Models.MovieModels
 
         public bool Sort { get; set; } = true;
 
-        public PageResponse<MovieVm> MoviesPage { get; set; } = null!;
+        public PageResponse<MovieVm> MoviesPage { get; set; }
+
+        public MovieFilteredResponse()
+        {
+            MoviesPage = new PageResponse<MovieVm>();
+        }
     }
 }

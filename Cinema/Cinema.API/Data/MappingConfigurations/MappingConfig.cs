@@ -80,6 +80,7 @@ namespace Cinema.API.Data.MappingConfigurations
             #region MovieCreateDto/Movie
 
             CreateMap<MovieCreateDto, Movie>()
+                .ForMember(src => src.PublicationDate, opt => opt.MapFrom(dest => DateTime.Now))
                 .ForMember(dest => dest.Directors, opt => opt.Ignore())
                 .ForMember(dest => dest.Actors, opt => opt.Ignore())
                 .ForMember(dest => dest.Screenwriters, opt => opt.Ignore());

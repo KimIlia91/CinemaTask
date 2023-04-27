@@ -2,6 +2,7 @@
 using Cinema.WEB.Models.GenreModels.GenreDtos;
 using Cinema.WEB.Models.GenreModels.GenreVms;
 using Cinema.WEB.Models.MovieModels.MovieDtos;
+using Cinema.WEB.Models.MovieModels.MovieVms;
 using Cinema.WEB.Models.PersonModels.PersonDtos;
 using Cinema.WEB.Models.PersonModels.PersonVms;
 
@@ -16,6 +17,8 @@ namespace Cinema.WEB.Data
             CreateMap<GenreCreateVM, GenreCreateDto>().ReverseMap();
 
             CreateMap<PersonDto, PersonVm>().ReverseMap();
+
+            CreateMap<MovieDto, MovieVm>().ReverseMap();    
 
             CreateMap<MovieDto, MovieUpdateDto>()
                 .ConvertUsing<MovieDtoToMovieUpdateDtoConverter>();

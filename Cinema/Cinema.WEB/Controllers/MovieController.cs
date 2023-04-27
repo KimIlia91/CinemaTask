@@ -39,6 +39,21 @@ namespace Cinema.WEB.Controllers
             return View(new MovieFilteredResponse());
         }
 
+        //GET: MovieController/MovieDetails/5
+        public async Task<IActionResult> MovieDetails(Guid id)
+        {
+            var token = HttpContext.Session.GetString(SD.SessionToken);
+            var movieDto = await _unitOfWork.Movies.GetMovieAsync(id, token!);
+            if (movieDto is null)
+            {
+                TempData["error"] = "Oops! Неудалось найти фильм.";
+                return RedirectToAction(nameof(MovieIndex));
+            }
+
+            var movieVm = _mapper.Map<MovieVm>(movieDto);   
+            return View(movieVm);
+        }
+
         //GET: MovieController/MovieCreate
         public async Task<IActionResult> MovieCreate()
         {
@@ -79,7 +94,7 @@ namespace Cinema.WEB.Controllers
             movieVm.ScreenwriterList = await _unitOfWork.Screenwriters.GetSelectListOfScreenwritersAsync(
                 token!, movieVm.Movie.Screenwriters);
             movieVm.GenreList = await _unitOfWork.Genres.GetSelectListOfGenresAsync(token!);
-            TempData["error"] = "Oops! Неудалось добавить информацию!";
+            TempData["error"] = "Oops! Не удалось добавить информацию.";
             return View(movieVm);
         }
 
@@ -134,7 +149,7 @@ namespace Cinema.WEB.Controllers
             movieVm.ScreenwriterList = await _unitOfWork.Screenwriters.GetSelectListOfScreenwritersAsync(
                 token!, movieVm.Movie.Screenwriters);
             movieVm.GenreList = await _unitOfWork.Genres.GetSelectListOfGenresAsync(token!);
-            TempData["error"] = "Oops! Неудалось обновить информацию!";
+            TempData["error"] = "Oops! Не удалось обновить информацию.";
             return View(movieVm);
         }
 
@@ -157,7 +172,7 @@ namespace Cinema.WEB.Controllers
                 }
             }
 
-            TempData["error"] = "Oops! Неудалось удалить информация.";
+            TempData["error"] = "Oops! Не удалось удалить информация.";
             return RedirectToAction(nameof(MovieIndex));
         }
     }
