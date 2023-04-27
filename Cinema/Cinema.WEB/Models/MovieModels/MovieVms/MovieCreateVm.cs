@@ -10,7 +10,7 @@ namespace Cinema.WEB.Models.MovieModels.MovieVms
         public MovieCreateDto Movie { get; set; }
 
         [AllowedExtensions(new string[] { ".jpg", ".jpeg" }, ErrorMessage = "Разрешены только файлы JPEG")]
-        [FileSize(50 * 1024 * 1024, ErrorMessage = "Размер файла не должен превышать 50 МБ")]
+        [FileSize(30 * 1024 * 1024, ErrorMessage = "Размер файла не должен превышать 30 МБ")]
         public IFormFile? ImageFile { get; set; }
 
         [AllowedExtensions(new string[] { ".mp4", ".avi", ".mov", ".mkv", ".AVI", ".MPEG", ".MOV", ".WMV", ".MP4", ".FLV", ".WebM" })]

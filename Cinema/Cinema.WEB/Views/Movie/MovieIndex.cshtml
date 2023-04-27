@@ -37,16 +37,16 @@
                                     <th width="35%" class="text-center align-middle">
                                         @if (Model.Sort)
                                             @Html.ActionLink("Наименование", "MovieIndex",
-                                        new { sort = false,
-                                        search = Model.Search,
-                                        page = Model.MoviesPage.CurrentPage,
-                                        pageSize = Model.MoviesPage.PageSize })
+                                                             new { sort = false,
+                                                                   search = Model.Search,
+                                                                   page = Model.MoviesPage.CurrentPage,
+                                                                   pageSize = Model.MoviesPage.PageSize })
                                         else
                                             @Html.ActionLink("Наименование", "MovieIndex",
-                                        new { sort = true,
-                                        search = Model.Search,
-                                        page = Model.MoviesPage.CurrentPage,
-                                        pageSize = Model.MoviesPage.PageSize })
+                                                             new { sort = true,
+                                                                   search = Model.Search,
+                                                                   page = Model.MoviesPage.CurrentPage,
+                                                                   pageSize = Model.MoviesPage.PageSize })
 
 
                                         </th>
