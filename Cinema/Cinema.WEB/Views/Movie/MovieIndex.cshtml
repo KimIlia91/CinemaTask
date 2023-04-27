@@ -35,7 +35,14 @@
                         <div class="card mb-3 border-1" style="border:none;">
                             <div class="row no-gutters p-2">
                                 <a asp-controller="Movie" asp-action="MovieDetails" asp-route-id="@movie.Id" class="col-xl-4 d-flex justify-content-center align-items-center">
-                                    <img src="@movie.ImageUrl" alt="movie img" class="card-img rounded" style="object-fit: contain;">
+                                    @if (!string.IsNullOrEmpty(movie.ImageUrl))
+                                    {
+                                        <img src="@movie.ImageUrl" alt="movie img" class="img-fluid rounded" style="object-fit:cover; height: 100%;">
+                                    }
+                                    else
+                                    {
+                                        <img src="\images\movies\1644809237_10-fikiwiki-com-p-prikolnie-kartinki-oi-durak-13.png" class="img-fluid rounded" style="object-fit: contain;">
+                                    }
                                 </a>
                                 <div class="col-xl-8">
                                     <div class="card-body">
@@ -45,21 +52,21 @@
                                                 <a asp-controller="Movie" asp-action="MovieUpdate" asp-route-id="@movie.Id" class="btn btn-success m-1"><i class="bi bi-pencil-square"></i></a>
                                                 <a asp-controller="Movie" asp-action="MovieDelete" asp-route-id="@movie.Id" class="btn btn-danger delete-btn"><i class="bi bi-trash"></i></a>
                                             </div>
-                                        </div>                  
-                                        <p class="card-text">Жанр: @movie.Genre.Name</p>
-                                        <p class="card-text">Страна: @movie.Country</p>
-                                        <p class="card-text">Длительность: @movie.RuntimeInMinutes мин</p>
-                                        <p class="card-text"> Режиссёр:
+                                        </div>
+                                        <p class="card-text"><b>Жанр: </b>@movie.Genre.Name</p>
+                                        <p class="card-text"><b>Страна: </b>@movie.Country</p>
+                                        <p class="card-text"><b>Длительность: </b>@movie.RuntimeInMinutes мин</p>
+                                        <p class="card-text"><b>Режиссёр: </b>
                                             @string.Join(", ", movie.Directors.Select(director => $"{director.FirstName} {director.LastName}"))
                                         </p>
-                                        <p class="card-text">Сценарист:
+                                        <p class="card-text"><b>Сценарист: </b>
                                             @string.Join(", ", movie.Screenwriters.Select(screenwriter => $"{screenwriter.FirstName} {screenwriter.LastName}"))
                                         </p>
                                         <p class="card-text">
-                                            Актёры:
+                                            <b>Актёры: </b>
                                             @string.Join(", ", movie.Actors.Select(actor => $"{actor.FirstName} {actor.LastName}"))
                                         </p>
-                                        <div class="card-text">Описание: @Html.Raw(movie.ShortDescription)</div>
+                                        <div class="card-text"><b>Описание: </b>@Html.Raw(movie.ShortDescription)</div>
                                     </div>
                                 </div>
                             </div>
@@ -74,12 +81,12 @@
                             @if (Model.MoviesPage.CurrentPage > 1)
                             {
                                 <a class="btn btn-primary btn-block text-truncate" href="@Url.Action("MovieIndex",
-                                                                                                             new { page = Model.MoviesPage.CurrentPage - 1,
-                                                                                                                   search = Model.Search,
-                                                                                                                   sort = Model.Sort,
-                                                                                                                   titleFilter = Model.TitleFilter,
-                                                                                                                   directorFilter = Model.DirectorFilter,
-                                                                                                                   genreFilter = Model.GenreFilter })">
+                                                                                                      new { page = Model.MoviesPage.CurrentPage - 1,
+                                                                                                            search = Model.Search,
+                                                                                                            sort = Model.Sort,
+                                                                                                            titleFilter = Model.TitleFilter,
+                                                                                                            directorFilter = Model.DirectorFilter,
+                                                                                                            genreFilter = Model.GenreFilter })">
                                     <span class="glyphicon glyphicon-chevron-left"></span> назад
                                 </a>
                             }
@@ -95,12 +102,12 @@
                             @if (Model.MoviesPage.CurrentPage < Model.MoviesPage.TotalPages)
                             {
                                 <a class="btn btn-primary btn-block text-truncate" href="@Url.Action("MovieIndex",
-                                                                                                         new { page = Model.MoviesPage.CurrentPage - 1,
-                                                                                                               search = Model.Search,
-                                                                                                               sort = Model.Sort,
-                                                                                                               titleFilter = Model.TitleFilter,
-                                                                                                               directorFilter = Model.DirectorFilter,
-                                                                                                               genreFilter = Model.GenreFilter })">
+                                                                                                     new { page = Model.MoviesPage.CurrentPage - 1,
+                                                                                                           search = Model.Search,
+                                                                                                           sort = Model.Sort,
+                                                                                                           titleFilter = Model.TitleFilter,
+                                                                                                           directorFilter = Model.DirectorFilter,
+                                                                                                           genreFilter = Model.GenreFilter })">
                                     далее <span class="glyphicon glyphicon-chevron-right"></span>
                                 </a>
                             }

@@ -55,7 +55,6 @@ namespace Cinema.WEB.Services
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
                 var apiResponseDto = JsonConvert.DeserializeObject<ApiResponse>(apiContent);
                 return apiResponseDto!;
-                client.GetAsync(,)
             }
             catch (Exception ex)
             {
