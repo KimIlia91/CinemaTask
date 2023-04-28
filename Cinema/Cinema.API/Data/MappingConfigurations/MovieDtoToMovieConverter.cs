@@ -13,7 +13,6 @@ namespace Cinema.API.Data.MappingConfigurations
 
             destination.Id = source.Id;
             destination.Title = source.Title;
-            destination.ShortDescription = source.ShortDescription;
             destination.Description = source.Description;
             destination.ReleaseYear = source.ReleaseYear;
             destination.RuntimeInMinutes = source.RuntimeInMinutes;

@@ -27,7 +27,6 @@ namespace Cinema.API.Repositories
                              .Include(m => m.Genre)
                              .Where(m => (string.IsNullOrEmpty(search) ||
                                                m.Title.Contains(search) ||
-                                               m.ShortDescription.Contains(search) ||
                                                m.Description.Contains(search) ||
                                                m.Actors.Any(a => a.Person.FirstName.Contains(search) ||
                                                                  a.Person.LastName.Contains(search)) ||
@@ -41,7 +40,7 @@ namespace Cinema.API.Repositories
         }
 
         public IQueryable<Movie> GetSortedMoviesQuery(IQueryable<Movie> query, bool sort = true) =>
-            sort ? query.OrderByDescending(m => m.Title) : query.OrderBy(m => m.PublicationDate);
+            sort ? query.OrderByDescending(m => m.PublicationDate) : query.OrderBy(m => m.PublicationDate);
 
         public async Task<Movie?> GetMovieIncludePersonAsync(Guid movieId)
         {

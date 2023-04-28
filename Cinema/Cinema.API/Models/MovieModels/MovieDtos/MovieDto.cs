@@ -9,8 +9,6 @@ namespace Cinema.API.Models.MovieModels.MovieDtos
 
         public string Title { get; set; } = null!;
 
-        public string ShortDescription { get; set; } = null!;
-
         public string Description { get; set; } = null!;
 
         public int ReleaseYear { get; set; }

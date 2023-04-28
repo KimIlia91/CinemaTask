@@ -1,4 +1,5 @@
-﻿using Cinema.WEB.Models.MovieModels;
+﻿using Cinema.WEB.Models;
+using Cinema.WEB.Models.MovieModels;
 using Cinema.WEB.Models.MovieModels.MovieDtos;
 
 namespace Cinema.WEB.Services.IServices
@@ -9,9 +10,9 @@ namespace Cinema.WEB.Services.IServices
 
         Task<MovieDto> GetMovieAsync(Guid? id, string token);
 
-        Task<bool> CreateMovieAsync(MovieCreateDto dto, string token);
+        Task<ApiResponse> CreateMovieAsync(MovieCreateDto dto, string token);
 
-        Task<bool> UpdateMovieAsync(MovieUpdateDto dto, string token);
+        Task<ApiResponse> UpdateMovieAsync(MovieUpdateDto dto, string token);
 
         Task<bool> DeleteMovieAsync(Guid id, string token);
     }

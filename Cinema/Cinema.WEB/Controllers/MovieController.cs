@@ -78,8 +78,8 @@ namespace Cinema.WEB.Controllers
             {
                 movieVm.Movie.ImageUrl = await _unitOfWork.Images.SaveImageAsync(movieVm.ImageFile, movieVm.Movie.ImageUrl, @"images\movies");
                 movieVm.Movie.VideoUrl = await _unitOfWork.Videos.SaveVideoAsync(movieVm.VideoFile, movieVm.Movie.VideoUrl, @"videos\movies");
-                var isSuccess = await _unitOfWork.Movies.CreateMovieAsync(movieVm.Movie, token!);
-                if (isSuccess)
+                var response = await _unitOfWork.Movies.CreateMovieAsync(movieVm.Movie, token!);
+                if (response.IsSuccess)
                 {
                     TempData["success"] = "Информация успешно добавлена!";
                     return RedirectToAction(nameof(MovieIndex));
@@ -87,13 +87,20 @@ namespace Cinema.WEB.Controllers
 
                 _unitOfWork.Images.DeleteImage(movieVm.Movie.ImageUrl);
                 _unitOfWork.Videos.DeleteVideo(movieVm.Movie.VideoUrl);
+                movieVm.Movie.ImageUrl = null;
+                movieVm.Movie.VideoUrl = null;
+                movieVm.ActorList = await _unitOfWork.Actors.GetSelectListOfActorsAsync(token!, movieVm.Movie.Actors);
+                movieVm.DirectorList = await _unitOfWork.Directors.GetSelectListOfDirectorsAsync(token!, movieVm.Movie.Directors);
+                movieVm.ScreenwriterList = await _unitOfWork.Screenwriters.GetSelectListOfScreenwritersAsync(
+                    token!, movieVm.Movie.Screenwriters);
+                movieVm.GenreList = await _unitOfWork.Genres.GetSelectListOfGenresAsync(token!);
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    TempData["error"] = string.Join("\n", response.ErrorMessage);
+                    return View(movieVm);
+                }
             }
 
-            movieVm.ActorList = await _unitOfWork.Actors.GetSelectListOfActorsAsync(token!, movieVm.Movie.Actors);
-            movieVm.DirectorList = await _unitOfWork.Directors.GetSelectListOfDirectorsAsync(token!, movieVm.Movie.Directors);
-            movieVm.ScreenwriterList = await _unitOfWork.Screenwriters.GetSelectListOfScreenwritersAsync(
-                token!, movieVm.Movie.Screenwriters);
-            movieVm.GenreList = await _unitOfWork.Genres.GetSelectListOfGenresAsync(token!);
             TempData["error"] = "Oops! Не удалось добавить информацию.";
             return View(movieVm);
         }
@@ -129,26 +136,34 @@ namespace Cinema.WEB.Controllers
             var token = HttpContext.Session.GetString(SD.SessionToken);
             if (ModelState.IsValid)
             {
+                var oldImgPath = movieVm.Movie.ImageUrl;
+                var oldVideoPath = movieVm.Movie.VideoUrl;
                 movieVm.Movie.ImageUrl = await _unitOfWork.Images.SaveImageAsync(movieVm.ImageFile, movieVm.Movie.ImageUrl, @"images\movies");
                 movieVm.Movie.VideoUrl = await _unitOfWork.Videos.SaveVideoAsync(movieVm.VideoFile, movieVm.Movie.VideoUrl, @"videos\movies");
-                var isSuccess = await _unitOfWork.Movies.UpdateMovieAsync(movieVm.Movie, token!);
-                if (isSuccess)
+                var response = await _unitOfWork.Movies.UpdateMovieAsync(movieVm.Movie, token!);
+                if (response.IsSuccess)
                 {
                     TempData["success"] = "Информация успешно обновлена!";
+                    _unitOfWork.Images.DeleteImage(oldImgPath);
+                    _unitOfWork.Videos.DeleteVideo(oldVideoPath);
                     return RedirectToAction(nameof(MovieIndex));
                 }
 
-                if (movieVm.Movie.ImageUrl is not null)
-                    _unitOfWork.Images.DeleteImage(movieVm.Movie.ImageUrl);
-                if (movieVm.Movie.VideoUrl is not null)
-                    _unitOfWork.Videos.DeleteVideo(movieVm.Movie.VideoUrl);
+                _unitOfWork.Images.DeleteImage(movieVm.Movie.ImageUrl);
+                _unitOfWork.Videos.DeleteVideo(movieVm.Movie.VideoUrl);
+                movieVm.Movie.ImageUrl = oldImgPath;
+                movieVm.Movie.VideoUrl = oldVideoPath;
+                movieVm.ActorList = await _unitOfWork.Actors.GetSelectListOfActorsAsync(token!, movieVm.Movie.Actors);
+                movieVm.DirectorList = await _unitOfWork.Directors.GetSelectListOfDirectorsAsync(token!, movieVm.Movie.Directors);
+                movieVm.ScreenwriterList = await _unitOfWork.Screenwriters.GetSelectListOfScreenwritersAsync(token!, movieVm.Movie.Screenwriters);
+                movieVm.GenreList = await _unitOfWork.Genres.GetSelectListOfGenresAsync(token!);
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    TempData["error"] = string.Join("\n", response.ErrorMessage);
+                    return View(movieVm);
+                }
             }
 
-            movieVm.ActorList = await _unitOfWork.Actors.GetSelectListOfActorsAsync(token!, movieVm.Movie.Actors);
-            movieVm.DirectorList = await _unitOfWork.Directors.GetSelectListOfDirectorsAsync(token!, movieVm.Movie.Directors);
-            movieVm.ScreenwriterList = await _unitOfWork.Screenwriters.GetSelectListOfScreenwritersAsync(
-                token!, movieVm.Movie.Screenwriters);
-            movieVm.GenreList = await _unitOfWork.Genres.GetSelectListOfGenresAsync(token!);
             TempData["error"] = "Oops! Не удалось обновить информацию.";
             return View(movieVm);
         }

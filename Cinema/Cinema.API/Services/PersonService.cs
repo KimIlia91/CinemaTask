@@ -38,9 +38,7 @@ namespace Cinema.API.Services
         public async Task CreatePersonAsync(PersonCreateDto personDto)
         {
             var person = _mapper.Map<Person>(personDto);
-            var personsExist = await _unitOfWork.Persons.GetOrDefaultAsync(p => p.LastName == person.LastName &&
-                                                                                p.FirstName == person.FirstName);
-            if (personsExist != null)
+            if (!await IsPersonUniqueAsync(person))
                 throw new ArgumentException("Персона с таким именем и фамилией уже существует.");
 
             await _unitOfWork.Persons.AddAndSaveAsync(person);
@@ -91,9 +89,9 @@ namespace Cinema.API.Services
         /// </remarks>
         private async Task<bool> IsPersonUniqueAsync(Person person)
         {
-            var isPersonExist = await _unitOfWork.Persons.GetOrDefaultAsync(p => p.Id != person.Id && 
-                                                                                 p.LastName == person.LastName &&
-                                                                                 p.FirstName == person.FirstName);
+            var isPersonExist = await _unitOfWork.Persons.GetOrDefaultAsync(p => p.LastName.Trim().ToLower() == person.LastName.Trim().ToLower() &&
+                                                                                 p.FirstName.Trim().ToLower() == person.FirstName.Trim().ToLower() &&
+                                                                                 p.Id != person.Id);
             return isPersonExist is null;
         }
     }

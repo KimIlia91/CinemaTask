@@ -17,7 +17,6 @@ namespace Cinema.API.Data.MappingConfigurations
             destination.VideoUrl = source.VideoUrl;
             destination.ImageUrl = source.ImageUrl;
             destination.Description = source.Description;
-            destination.ShortDescription = source.ShortDescription;
             destination.ReleaseYear = source.ReleaseYear;
             destination.RuntimeInMinutes = source.RuntimeInMinutes;
             destination.Country = source.Country;

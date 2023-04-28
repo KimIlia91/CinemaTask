@@ -71,8 +71,8 @@ namespace Cinema.API.Services
             if (movie is null)
                 throw new ArgumentNullException(nameof(movieDto), "Фильм не найден.");
 
-            var moviesWithSameTitle = await _unitOfWork.Movies.GetAllEntities(m => m.Title == movieDto.Title &&
-                                                                                   m.Id != movieDto.Id)
+            var moviesWithSameTitle = await _unitOfWork.Movies.GetAllEntities(m => m.Id != movieDto.Id &&
+                                                                                   m.Title.ToLower() == movieDto.Title.ToLower())
                                                               .ToListAsync();
             if (moviesWithSameTitle.Any())
                 throw new ArgumentException("Фильм с таким названием уже существует.");

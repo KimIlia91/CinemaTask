@@ -16,7 +16,7 @@ namespace Cinema.WEB.Services
             _cinemaApi = cinemaApi;
         }
 
-        public async Task<bool> CreateMovieAsync(MovieCreateDto dto, string token)
+        public async Task<ApiResponse> CreateMovieAsync(MovieCreateDto dto, string token)
         {
             var response = await _cinemaApi.PostAsync(new ApiRequest()
             {
@@ -25,7 +25,7 @@ namespace Cinema.WEB.Services
                 Token = token
             });
 
-            return response.IsSuccess;
+            return response;
         }
 
         public async Task<bool> DeleteMovieAsync(Guid id, string token)
@@ -73,7 +73,7 @@ namespace Cinema.WEB.Services
             return new MovieDto();
         }
 
-        public async Task<bool> UpdateMovieAsync(MovieUpdateDto dto, string token)
+        public async Task<ApiResponse> UpdateMovieAsync(MovieUpdateDto dto, string token)
         {
             var respnse = await _cinemaApi.PutAsync(new ApiRequest()
             {
@@ -82,7 +82,7 @@ namespace Cinema.WEB.Services
                 Token = token
             });
 
-            return respnse.IsSuccess;
+            return respnse;
         }
     }
 }

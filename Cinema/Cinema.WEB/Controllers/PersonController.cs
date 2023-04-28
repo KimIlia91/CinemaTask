@@ -3,6 +3,7 @@ using Cinema.WEB.Models.PersonModels;
 using Cinema.WEB.Models.PersonModels.PersonVms;
 using Cinema.WEB.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Cinema.WEB.Controllers
 {
@@ -28,8 +29,7 @@ namespace Cinema.WEB.Controllers
         // GET: PersonController/Create
         public ActionResult PersonCreate()
         {
-            var personVm = new PersonCreateVm();
-            return View(personVm);
+            return View(new PersonCreateVm());
         }
 
         // POST: PersonController/Create
@@ -41,14 +41,20 @@ namespace Cinema.WEB.Controllers
             {
                 var token = HttpContext.Session.GetString(SD.SessionToken);
                 personVm.Person.ImageUrl = await _unitOfWork.Images.SaveImageAsync(personVm.ImageFile, personVm.Person.ImageUrl, @"images\persons");
-                var isSuccess = await _unitOfWork.Persons.CreatePersonAsync(personVm.Person, token!);
-                if (isSuccess)
+                var response = await _unitOfWork.Persons.CreatePersonAsync(personVm.Person, token!);
+                if (response.IsSuccess)
                 {
                     TempData["success"] = "Информация успешно добавлена!";
                     return RedirectToAction(nameof(PersonIndex));
                 }
 
                 _unitOfWork.Images.DeleteImage(personVm.Person.ImageUrl);
+                personVm.Person.ImageUrl = null; 
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    TempData["error"] = string.Join("\n", response.ErrorMessage);
+                    return View(personVm);
+                }
             }
 
             TempData["error"] = "Oops! Неудалось добавить информацию!";
@@ -58,14 +64,14 @@ namespace Cinema.WEB.Controllers
         // GET: PersonController/PersonUpdate/5
         public async Task<IActionResult> PersonUpdate(Guid id)
         {
-            var token = HttpContext.Session.GetString(SD.SessionToken);
-            var personUpdateVm = new PersonUpdateVm
+            if (id != Guid.Empty)
             {
-                Person = await _unitOfWork.Persons.GetPersonAsync(id, token!)
-            };
+                var token = HttpContext.Session.GetString(SD.SessionToken);
+                var personUpdateVm = new PersonUpdateVm
+                {
+                    Person = await _unitOfWork.Persons.GetPersonAsync(id, token!)
+                };
 
-            if (personUpdateVm.Person.Id != Guid.Empty)
-            {
                 return View(personUpdateVm);
             }
 
@@ -80,13 +86,23 @@ namespace Cinema.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
+                var oldImgPath = personVm.Person.ImageUrl;
                 personVm.Person.ImageUrl = await _unitOfWork.Images.SaveImageAsync(personVm.ImageFile, personVm.Person.ImageUrl, @"images\persons");
                 var token = HttpContext.Session.GetString(SD.SessionToken);
-                var isSuccess = await _unitOfWork.Persons.UpdatePersonAsync(personVm.Person, token!);
-                if (isSuccess)
+                var response = await _unitOfWork.Persons.UpdatePersonAsync(personVm.Person, token!);
+                if (response.IsSuccess)
                 {
                     TempData["success"] = "Информация успешно обновлена!";
+                    _unitOfWork.Images.DeleteImage(oldImgPath);
                     return RedirectToAction(nameof(PersonIndex));
+                }
+
+                _unitOfWork.Images.DeleteImage(personVm.Person.ImageUrl);
+                personVm.Person.ImageUrl = oldImgPath;
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    TempData["error"] = string.Join("\n", response.ErrorMessage);
+                    return View(personVm);
                 }
             }
 
@@ -104,8 +120,7 @@ namespace Cinema.WEB.Controllers
                 var isSuccess = await _unitOfWork.Persons.DeletePersonAsync(personToDelete.Id, token!);
                 if (isSuccess)
                 {
-                    if (personToDelete.ImageUrl is not null)
-                        _unitOfWork.Images.DeleteImage(personToDelete.ImageUrl);
+                    _unitOfWork.Images.DeleteImage(personToDelete.ImageUrl);
                     TempData["success"] = "Информация успешно удалена!";
                     return RedirectToAction(nameof(PersonIndex));
                 }

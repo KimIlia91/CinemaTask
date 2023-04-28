@@ -82,12 +82,16 @@ namespace Cinema.API.Controllers
             {
                 if (!ModelState.IsValid)
                     return _response.BadRequestResponse(ModelState.Values.SelectMany(
-                    v => v.Errors.Select(e => e.ErrorMessage)).ToList());
+                                    v => v.Errors.Select(e => e.ErrorMessage)).ToList());
+
                 await _personService.CreatePersonAsync(personDto);
                 return _response.CreatedResponse();
             }
             catch (Exception ex)
             {
+                if (ex is ArgumentException argEx)
+                    return _response.BadRequestResponse(new List<string> { argEx.Message });
+
                 return _response.ErrorResponse(new List<string> { ex.Message });
             }
         }
@@ -138,11 +142,15 @@ namespace Cinema.API.Controllers
                 if (!ModelState.IsValid)
                     return _response.BadRequestResponse(ModelState.Values.SelectMany(
                             v => v.Errors.Select(e => e.ErrorMessage)).ToList());
+
                 await _personService.UpdatePersonAsync(personDto);
                 return _response.SuccessResponse();
             }
             catch (Exception ex)
             {
+                if (ex is ArgumentException argEx)
+                    return _response.BadRequestResponse(new List<string> { argEx.Message });
+
                 return _response.ErrorResponse(new List<string> { ex.Message });
             }
         }
@@ -165,6 +173,7 @@ namespace Cinema.API.Controllers
             {
                 if (!Guid.TryParse(id, out Guid guidId))
                     return _response.BadRequestResponse(new List<string> { "Входные данные не являются формата Guid." });
+
                 await _personService.DeletePersonAsync(guidId);
                 return _response.NoContentResponse();
             }

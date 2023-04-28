@@ -8,10 +8,6 @@ namespace Cinema.API.Models.MovieModels.MovieDtos
         [StringLength(50, ErrorMessage = "Длина названия фильма 1 - 50 символов")]
         public string Title { get; set; } = null!;
 
-        [Required(ErrorMessage = "Короткое описание обязательно для заполнения")]
-        [StringLength(int.MaxValue, MinimumLength = 100, ErrorMessage = "Длина описания фильма не меньше 100 символов")]
-        public string ShortDescription { get; set; } = null!; // можно перделать!!!!
-
         [Required(ErrorMessage = "Полное описание обязательно для заполнения")]
         [StringLength(int.MaxValue, MinimumLength = 100, ErrorMessage = "Длина описания фильма не меньше 100 символов")]
         public string Description { get; set; } = null!;

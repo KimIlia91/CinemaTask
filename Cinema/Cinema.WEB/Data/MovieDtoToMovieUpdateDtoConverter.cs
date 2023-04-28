@@ -12,7 +12,6 @@ namespace Cinema.WEB.Data
             destination.Id = source.Id;
             destination.Title = source.Title;
             destination.Description = source.Description;
-            destination.ShortDescription = source.ShortDescription;
             destination.Country = source.Country;
             destination.ReleaseYear = source.ReleaseYear;
             destination.RuntimeInMinutes = source.RuntimeInMinutes;

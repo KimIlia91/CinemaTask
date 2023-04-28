@@ -14,27 +14,22 @@ namespace Cinema.WEB.Services
 
         public async Task<string?> SaveVideoAsync(IFormFile? file, string? existingImagePath, string savePath)
         {
-            if (!IsValidVideo(file)) return existingImagePath;
-
-            if (!string.IsNullOrEmpty(existingImagePath))
-            {
-                var oldImagePath = Path.Combine(_hostEnvironment.WebRootPath, existingImagePath.TrimStart('\\'));
-                if (File.Exists(oldImagePath))
-                    File.Delete(oldImagePath);
-            }
+            if (!IsValidVideo(file)) 
+                return existingImagePath;
 
             return await UploadVideoAsync(file, savePath);
         }
 
         public bool DeleteVideo(string? videoUrl)
         {
-            if (videoUrl is null) return false;
-
-            var oldImagePath = Path.Combine(_hostEnvironment.WebRootPath, videoUrl.TrimStart('\\'));
-            if (File.Exists(oldImagePath))
+            if (videoUrl is not null)
             {
-                File.Delete(oldImagePath);
-                return true;
+                var oldImagePath = Path.Combine(_hostEnvironment.WebRootPath, videoUrl.TrimStart('\\'));
+                if (File.Exists(oldImagePath))
+                {
+                    File.Delete(oldImagePath);
+                    return true;
+                }
             }
 
             return false;

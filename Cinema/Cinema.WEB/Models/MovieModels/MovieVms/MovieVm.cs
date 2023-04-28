@@ -9,8 +9,6 @@ namespace Cinema.WEB.Models.MovieModels.MovieVms
 
         public string Title { get; set; } = null!;
 
-        public string ShortDescription { get; set; } = null!; // можно перделать!!!!
-
         public string Description { get; set; } = null!;
 
         public int ReleaseYear { get; set; }

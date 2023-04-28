@@ -7,7 +7,6 @@ using Cinema.API.Models.MovieModels.MovieDtos;
 using Cinema.API.Models.MovieModels;
 using Cinema.API.Models.PersonModels.PersonDtos;
 using Cinema.API.Models.PersonModels;
-using System.ComponentModel;
 using Cinema.API.Models;
 
 namespace Cinema.API.Data.MappingConfigurations

@@ -12,11 +12,6 @@ namespace Cinema.WEB.Models.MovieModels.MovieDtos
         [Display(Name = "Наименование")]
         public string Title { get; set; } = null!;
 
-        [Required(ErrorMessage = "Короткое описание обязательно для заполнения")]
-        [StringLength(int.MaxValue, MinimumLength = 100, ErrorMessage = "Длина описания фильма не меньше 100 символов")]
-        [Display(Name = "Кроткое описание")]
-        public string ShortDescription { get; set; } = null!; // можно перделать!!!!
-
         [Required(ErrorMessage = "Полное описание обязательно для заполнения")]
         [StringLength(int.MaxValue, MinimumLength = 100, ErrorMessage = "Длина описания фильма не меньше 100 символов")]
         [Display(Name = "Полное описание")]

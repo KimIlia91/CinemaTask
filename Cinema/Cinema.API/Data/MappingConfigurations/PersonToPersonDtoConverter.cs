@@ -8,19 +8,18 @@ namespace Cinema.API.Data.MappingConfigurations
     {
         public PersonDto Convert(Person source, PersonDto destination, ResolutionContext context)
         {
-            destination = new PersonDto
-            {
-                Id = source.Id,
-                FirstName = source.FirstName,
-                LastName = source.LastName,
-                DateOfBirth = source.DateOfBirth,
-                Country = source.Country,
-                Age = source.Age,
-                ImageUrl = source.ImageUrl,
-                IsActor = source.Actor != null,
-                IsDirector = source.Director != null,
-                IsScreenwriter = source.Screenwriter != null,
-            };
+            destination ??= new PersonDto();
+
+            destination.Id = source.Id;
+            destination.FirstName = source.FirstName;
+            destination.LastName = source.LastName;
+            destination.DateOfBirth = source.DateOfBirth;
+            destination.Country = source.Country;
+            destination.Age = source.Age;
+            destination.ImageUrl = source.ImageUrl;
+            destination.IsActor = source.Actor != null;
+            destination.IsDirector = source.Director != null;
+            destination.IsScreenwriter = source.Screenwriter != null;
 
             return destination;
         }

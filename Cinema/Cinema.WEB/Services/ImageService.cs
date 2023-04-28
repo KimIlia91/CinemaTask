@@ -15,15 +15,6 @@ namespace Cinema.WEB.Services
         {
             if (file is null) return existingImagePath;
 
-            if (!string.IsNullOrEmpty(existingImagePath))
-            {
-                var oldImagePath = Path.Combine(_hostEnvironment.WebRootPath, existingImagePath.TrimStart('\\'));
-                if (File.Exists(oldImagePath))
-                {
-                    File.Delete(oldImagePath);
-                }
-            }
-
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var uploads = Path.Combine(_hostEnvironment.WebRootPath, savePath);
             using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
