@@ -7,23 +7,22 @@ using Newtonsoft.Json;
 
 namespace Cinema.WEB.Services
 {
-    public class DirectorService : BaseService, IDirectorService
+    public class DirectorService : IDirectorService
     {
-        private readonly string _cinemaUrl;
+        private readonly ICinemaApiHttpClientService _cinemaApi;
 
-        public DirectorService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
+        public DirectorService(ICinemaApiHttpClientService cinemaApi)
         {
-            _cinemaUrl = configuration.GetValue<string>("ServiceUrl:CinemaApi")!;
+            _cinemaApi = cinemaApi;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetSelectListOfDirectorsAsync(
             string token,
             IEnumerable<Guid> selectedDirectorIds)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.GetAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.GET,
-                Url = $"{_cinemaUrl}/api/director",
+                Url = "/api/director",
                 Token = token
             });
 
@@ -50,10 +49,9 @@ namespace Cinema.WEB.Services
 
         public async Task<DirectorDto> GetDirectorAsync(Guid? id, string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.GetAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.GET,
-                Url = _cinemaUrl + "/api/director/" + id,
+                Url = "/api/director/" + id,
                 Token = token
             });
 

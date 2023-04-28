@@ -7,21 +7,20 @@ using Cinema.WEB.Models.MovieModels.MovieDtos;
 
 namespace Cinema.WEB.Services
 {
-    public class MovieService : BaseService, IMovieService
+    public class MovieService : IMovieService
     {
-        private readonly string _cinemaUrl;
+        private readonly ICinemaApiHttpClientService _cinemaApi;
 
-        public MovieService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
+        public MovieService(ICinemaApiHttpClientService cinemaApi)
         {
-            _cinemaUrl = configuration.GetValue<string>("ServiceUrl:CinemaApi")!;
+            _cinemaApi = cinemaApi;
         }
 
         public async Task<bool> CreateMovieAsync(MovieCreateDto dto, string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.PostAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.POST,
-                Url = _cinemaUrl + "/api/movie",
+                Url = "/api/movie",
                 Data = dto,
                 Token = token
             });
@@ -31,10 +30,9 @@ namespace Cinema.WEB.Services
 
         public async Task<bool> DeleteMovieAsync(Guid id, string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.DeleteAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.DELETE,
-                Url = _cinemaUrl + "/api/movie/" + id,
+                Url = "/api/movie/" + id,
                 Token = token
             });
 
@@ -43,10 +41,9 @@ namespace Cinema.WEB.Services
 
         public async Task<MovieFilteredResponse> GetAllMoviesAsync(string token, MoviesFilterRequest opt)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.GetAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.GET,
-                Url = $"{_cinemaUrl}/api/movie?search={opt.Search}&titleFilter={opt.TitleFilter}&DirectorFilter={opt.DirectorFilter}&GenreFilter={opt.GenreFilter}&sort={opt.Sort}&page={opt.Page}&pageSize={opt.PageSize}",
+                Url = $"/api/movie?search={opt.Search}&titleFilter={opt.TitleFilter}&DirectorFilter={opt.DirectorFilter}&GenreFilter={opt.GenreFilter}&sort={opt.Sort}&page={opt.Page}&pageSize={opt.PageSize}",
                 Token = token
             });
 
@@ -61,10 +58,9 @@ namespace Cinema.WEB.Services
 
         public async Task<MovieDto> GetMovieAsync(Guid? id, string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.GetAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.GET,
-                Url = _cinemaUrl + "/api/movie/" + id,
+                Url = "/api/movie/" + id,
                 Token = token
             });
 
@@ -79,10 +75,9 @@ namespace Cinema.WEB.Services
 
         public async Task<bool> UpdateMovieAsync(MovieUpdateDto dto, string token)
         {
-            var respnse = await SendAsync(new ApiRequest()
+            var respnse = await _cinemaApi.PutAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.PUT,
-                Url = _cinemaUrl + "/api/movie",
+                Url = "/api/movie",
                 Data = dto,
                 Token = token
             });

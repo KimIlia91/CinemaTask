@@ -1,5 +1,4 @@
-﻿using Cinema.WEB.Helpers;
-using Cinema.WEB.Models;
+﻿using Cinema.WEB.Models;
 using Cinema.WEB.Models.GenreModels.GenreDtos;
 using Cinema.WEB.Services.IServices;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,75 +6,62 @@ using Newtonsoft.Json;
 
 namespace Cinema.WEB.Services
 {
-    public class GenreService : BaseService, IGenreService
+    public class GenreService : IGenreService
     {
-        private readonly string _cinemaUrl;
+        private readonly ICinemaApiHttpClientService _cinemaApi;
 
-        public GenreService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
+        public GenreService(ICinemaApiHttpClientService cinemaApi)
         {
-            _cinemaUrl = configuration.GetValue<string>("ServiceUrl:CinemaApi")!;
+            _cinemaApi = cinemaApi;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetSelectListOfGenresAsync(string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.GetAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.GET,
-                Url = $"{_cinemaUrl}/api/genre",
+                Url = "/api/genre",
                 Token = token
             });
 
-            if (response.Result != null && response.IsSuccess)
-            {
-                var dtos = JsonConvert.DeserializeObject<List<GenreDto>>(Convert.ToString(response.Result)!);
-                return dtos!.Select(g => new SelectListItem { Text = g.Name, Value = g.Id.ToString() });
-            }
+            if (response.Result is null && !response.IsSuccess) return Enumerable.Empty<SelectListItem>();
 
-            return Enumerable.Empty<SelectListItem>();
+            var dtos = JsonConvert.DeserializeObject<List<GenreDto>>(Convert.ToString(response.Result)!);
+            return dtos!.Select(g => new SelectListItem { Text = g.Name, Value = g.Id.ToString() });
         }
 
         public async Task<List<GenreDto>> GetAllGenersAsync(string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.GetAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.GET,
-                Url = _cinemaUrl + "/api/genre",
+                Url = "/api/genre",
                 Token = token
             });
 
-            if (response.Result != null && response.IsSuccess)
-            {
-                var genreDtos = JsonConvert.DeserializeObject<IEnumerable<GenreDto>>(Convert.ToString(response.Result)!);
-                return genreDtos!.ToList();
-            }
+            if (response.Result is null && !response.IsSuccess) return new List<GenreDto>();
 
-            return new List<GenreDto>();
+            var genreDtos = JsonConvert.DeserializeObject<IEnumerable<GenreDto>>(Convert.ToString(response.Result)!);
+            return genreDtos!.ToList();
         }
 
         public async Task<GenreDto> GetGenreAsync(Guid id, string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.GetAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.GET,
-                Url = _cinemaUrl + "/api/genre/" + id,
+                Url = "/api/genre/" + id,
                 Token = token
             });
 
-            if (response.Result != null && response.IsSuccess)
-            {
-                var genreDto = JsonConvert.DeserializeObject<GenreDto>(Convert.ToString(response.Result)!);
-                return genreDto ?? new GenreDto();
-            }
+            if (response.Result is null && !response.IsSuccess) return new GenreDto();
 
-            return new GenreDto();
+            var genreDto = JsonConvert.DeserializeObject<GenreDto>(Convert.ToString(response.Result)!);
+            return genreDto!;
         }
 
         public async Task<bool> CreateGenreAsync(GenreCreateDto createDto, string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.PostAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.POST,
-                Url = _cinemaUrl + "/api/genre",
+                Url = "/api/genre",
                 Data = createDto,
                 Token = token
             });
@@ -85,10 +71,9 @@ namespace Cinema.WEB.Services
 
         public async Task<bool> UpdateGenreAsync(GenreDto genreDto, string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.PutAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.PUT,
-                Url = _cinemaUrl + "/api/genre",
+                Url = "/api/genre",
                 Data = genreDto,
                 Token = token
             });
@@ -98,10 +83,9 @@ namespace Cinema.WEB.Services
 
         public async Task<bool> DeleteGenreAsync(Guid id, string token)
         {
-            var response = await SendAsync(new ApiRequest()
+            var response = await _cinemaApi.DeleteAsync(new ApiRequest()
             {
-                ApiType = SD.ApiType.DELETE,
-                Url = _cinemaUrl + "/api/genre/" + id,
+                Url = "/api/genre/" + id,
                 Token = token
             });
 

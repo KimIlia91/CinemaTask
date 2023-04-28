@@ -50,7 +50,7 @@ namespace Cinema.API.Services
         public async Task<PersonDto> GetPersonByIdAsync(Guid id)
         {
             var person = await _unitOfWork.Persons.GetOrDefaultAsync(p => p.Id == id,
-                                                                     includeProperty: "Actor,Director,Screenwriter");
+                                                   includeProperty: "Actor,Director,Screenwriter");
             if (person is null)
                 throw new ArgumentException("Персона не найдена.");
 
@@ -61,12 +61,10 @@ namespace Cinema.API.Services
         public async Task UpdatePersonAsync(PersonDto personDto)
         {
             var personToUpdate = await _unitOfWork.Persons.GetOrDefaultAsync(p => p.Id == personDto.Id);
-
             if (personToUpdate is null)
                 throw new ArgumentNullException(nameof(personDto), "Персона не существует.");
 
             personToUpdate = _mapper.Map<Person>(personDto);
-
             if (!await IsPersonUniqueAsync(personToUpdate))
                 throw new ArgumentException("Персона с таким именем и фамилией уже существует.");
 
@@ -77,7 +75,6 @@ namespace Cinema.API.Services
         public async Task DeletePersonAsync(Guid id)
         {
             var person = await _unitOfWork.Persons.GetOrDefaultAsync(p => p.Id == id);
-
             if (person is null)
                 throw new ArgumentNullException(nameof(id), "Персона с таким идентификационным номером не найден.");
 
@@ -94,10 +91,10 @@ namespace Cinema.API.Services
         /// </remarks>
         private async Task<bool> IsPersonUniqueAsync(Person person)
         {
-            var isUniquePerson = await _unitOfWork.Persons.GetAllEntities(p => p.FirstName.Contains(person.FirstName) &&
-                                                                               p.LastName.Contains(person.LastName))
-                                                          .ToListAsync();
-            return isUniquePerson.Count == 1;
+            var isPersonExist = await _unitOfWork.Persons.GetOrDefaultAsync(p => p.Id != person.Id && 
+                                                                                 p.LastName == person.LastName &&
+                                                                                 p.FirstName == person.FirstName);
+            return isPersonExist is null;
         }
     }
 }

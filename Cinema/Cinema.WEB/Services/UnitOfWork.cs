@@ -20,14 +20,14 @@ namespace Cinema.WEB.Services
 
         public IVideoService Videos { get; private set; }
 
-        public UnitOfWork(IConfiguration configuration, IHttpClientFactory httpClient, IWebHostEnvironment hostEnvironment)
+        public UnitOfWork(IWebHostEnvironment hostEnvironment, ICinemaApiHttpClientService clientService)
         {
-            Movies = new MovieService(httpClient, configuration);
-            Persons = new PersonService(httpClient, configuration);
-            Genres = new GenreService(httpClient, configuration);
-            Actors = new ActorService(httpClient, configuration);
-            Directors = new DirectorService(httpClient, configuration);
-            Screenwriters = new ScreenwriterService(httpClient, configuration);
+            Movies = new MovieService(clientService);
+            Persons = new PersonService(clientService);
+            Genres = new GenreService(clientService);
+            Actors = new ActorService(clientService);
+            Directors = new DirectorService(clientService);
+            Screenwriters = new ScreenwriterService(clientService);
             Images = new ImageService(hostEnvironment);
             Videos = new VideoService(hostEnvironment);
         }

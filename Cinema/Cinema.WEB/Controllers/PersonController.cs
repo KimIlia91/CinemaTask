@@ -64,11 +64,12 @@ namespace Cinema.WEB.Controllers
                 Person = await _unitOfWork.Persons.GetPersonAsync(id, token!)
             };
 
-            if (personUpdateVm.Person != null)
+            if (personUpdateVm.Person.Id != Guid.Empty)
             {
                 return View(personUpdateVm);
             }
 
+            TempData["error"] = "Oops! Не удаётся получить информацию!";
             return RedirectToAction(nameof(PersonIndex));
         }
 

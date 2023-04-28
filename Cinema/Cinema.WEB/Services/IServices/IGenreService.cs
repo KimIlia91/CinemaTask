@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cinema.WEB.Services.IServices
 {
-    public interface IGenreService : IBaseService
+    public interface IGenreService
     {
         Task<IEnumerable<SelectListItem>> GetSelectListOfGenresAsync(string token);
 
